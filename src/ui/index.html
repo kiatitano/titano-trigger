@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Titano Trigger — kiatitano & titanoteam</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="bridge.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M27 3 8 27h13l-2 18 21-28H26z" fill="currentColor"/></svg></div><div><strong>TITANO<span>TRIGGER</span></strong><small>STREAM CONTROL STUDIO</small></div></div>
+      <div class="sidebar-section-label">فضای کار</div>
+      <nav aria-label="ناوبری اصلی">
+        <a class="nav-item active" href="#dashboard"><span class="nav-icon">◈</span> نمای کلی</a>
+        <a class="nav-item" href="#connection"><span class="nav-icon">◇</span> اتصال درگاه</a>
+        <a class="nav-item" href="#rules"><span class="nav-icon">⌘</span> قوانین اجرا</a>
+        <a class="nav-item" href="#activity"><span class="nav-icon">▤</span> رویدادها</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="safety-note"><span class="pulse-dot"></span><div><strong>کنترل در اختیار شماست</strong><p>توقف فوری در هر لحظه با <b dir="ltr">Ctrl + Shift + F12</b></p></div></div>
+        <div class="sidebar-credit">ساخته شده توسط<br><strong>kiatitano & titanoteam</strong></div>
+      </div>
+    </aside>
+    <main id="dashboard" class="main">
+      <header class="topbar"><div><div class="eyebrow">STREAM INTERACTION / 01</div><h1>استریم، با هر دونیت زنده‌تر.</h1><p>دونیت‌های ریمیت را به ورودی دلخواه کیبورد یا ماوس تبدیل کنید.</p></div><div class="topbar-status"><span id="connectionDot" class="status-dot"></span><span id="connectionLabel">بدون اتصال</span></div></header>
+
+      <section class="hero-card" aria-labelledby="heroTitle">
+        <div class="hero-orbit orbit-a"></div><div class="hero-orbit orbit-b"></div>
+        <div class="hero-content"><div class="hero-kicker"><span class="hero-kicker-dot"></span> LIVE CONTROL ENGINE</div><h2 id="heroTitle">کنترل زنده،<br><em>دست شماست.</em></h2><p id="heroStatus">برای شروع، حساب ریمیت خود را وصل کنید.</p><div class="hero-actions"><button id="armButton" class="btn btn-primary" disabled>شروع کنترل زنده <span aria-hidden="true">←</span></button><button id="stopButton" class="btn btn-stop" disabled>توقف کنترل</button></div></div>
+        <div class="hero-visual" aria-hidden="true"><div class="visual-ring ring-1"></div><div class="visual-ring ring-2"></div><div class="visual-core"><svg viewBox="0 0 48 48"><path d="M27 3 8 27h13l-2 18 21-28H26z" fill="currentColor"/></svg></div><div class="visual-chip chip-one">DONATION IN</div><div class="visual-chip chip-two">ACTION OUT</div></div>
+      </section>
+
+      <div class="stats-grid" aria-label="وضعیت برنامه"><div class="stat-card"><span class="stat-caption">وضعیت اجرا</span><strong id="armStatus">متوقف</strong><span class="stat-hint">فعال‌سازی دستی لازم است</span></div><div class="stat-card"><span class="stat-caption">قوانین فعال</span><strong id="ruleCount">۰</strong><span class="stat-hint">بازهٔ تومانی تعریف‌شده</span></div><div class="stat-card"><span class="stat-caption">آخرین بررسی</span><strong id="lastPoll">—</strong><span class="stat-hint">حدود هر ۲ ثانیه</span></div></div>
+
+      <section id="connection" class="panel"><div class="panel-header"><div><div class="section-index">01 / CONNECTION</div><h2>اتصال درگاه</h2><p>توکن فقط در حافظهٔ همین اجرای برنامه نگهداری می‌شود.</p></div><span class="provider-pill">REYMIT API</span></div>
+        <div class="provider-grid"><div class="provider-card selected"><div class="provider-head"><div class="provider-logo reymit">R</div><div><strong>ریمیت</strong><small>اتصال رسمی API</small></div><span class="provider-state available">فعال</span></div><label for="tokenInput">توکن API ریمیت</label><div class="token-row"><input id="tokenInput" type="password" autocomplete="off" spellcheck="false" placeholder="توکن را اینجا وارد کنید" aria-describedby="tokenHelp"><button id="connectButton" class="btn btn-secondary">اتصال</button></div><p id="tokenHelp" class="field-help">از تنظیمات حساب ریمیت ← متفرقه دریافت کنید. در فایل برنامه ذخیره نمی‌شود.</p><button id="disconnectButton" class="text-button" hidden>قطع اتصال</button></div>
+          <div class="provider-card disabled"><div class="provider-head"><div class="provider-logo donofa">D</div><div><strong>دونوفا</strong><small>در انتظار مستندات رسمی API</small></div><span class="provider-state unavailable">فعلاً غیرفعال</span></div><p class="provider-copy">پس از انتشار مسیر معتبر دریافت دونیت برای کاربران، این درگاه اضافه می‌شود.</p></div></div>
+      </section>
+
+      <section id="rules" class="panel"><div class="panel-header"><div><div class="section-index">02 / AUTOMATION RULES</div><h2>قوانین اجرا</h2><p>برای هر بازهٔ مبلغ، یک کلید یا دکمهٔ ماوس و مدت نگه‌داشتن آن را تعیین کنید.</p></div><span class="unit-pill">واحد: تومان</span></div>
+        <div id="rulesList" class="rules-list"></div>
+        <form id="ruleForm" class="rule-form"><div class="rule-form-title"><span class="add-icon">+</span><strong>قانون جدید</strong></div><div class="rule-fields"><label>از مبلغ<input name="min" type="number" min="1" step="1" placeholder="۱۰٬۰۰۰" required></label><label>تا مبلغ<input name="max" type="number" min="1" step="1" placeholder="۵۰٬۰۰۰" required></label><label>کلید / ماوس<select name="key" id="keySelect" required></select></label><label>مدت (ثانیه)<input name="duration" type="number" min="0.1" max="10" step="0.1" value="1" required></label><button class="btn btn-add" type="submit">افزودن قانون</button></div><p class="form-footnote">بازه‌ها نباید هم‌پوشانی داشته باشند. حداکثر مدت هر فرمان ۱۰ ثانیه است.</p></form>
+      </section>
+
+      <section id="activity" class="panel activity-panel"><div class="panel-header"><div><div class="section-index">03 / LIVE ACTIVITY</div><h2>رویدادهای اخیر</h2><p>فقط دونیت‌های جدید پس از روشن‌کردن کنترل بررسی می‌شوند.</p></div><span class="live-label"><span class="pulse-dot"></span> رویداد زنده</span></div><div id="activityList" class="activity-list"><div class="empty-state"><span>◇</span><strong>هنوز رویدادی ثبت نشده</strong><p>پس از اتصال و شروع کنترل، فعالیت‌ها اینجا نمایش داده می‌شوند.</p></div></div></section>
+      <footer class="footer"><div><strong>kiatitano & titanoteam</strong><span>© 2026 · Titano Trigger</span></div><div class="socials"><button data-link="instagram">Instagram / kiatitano ↗</button><button data-link="youtube">YouTube / kiatitano ↗</button><button data-link="reymit">راهنمای API ریمیت ↗</button></div></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
