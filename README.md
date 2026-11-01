@@ -12,7 +12,7 @@ A Persian-first Windows desktop utility for streamers. Titano Trigger checks the
 - Processes only new donations after live control starts, with duplicate-ID protection and a sequential action queue.
 - Emergency stop: `Ctrl + Shift + F12`.
 - Minimize to the Windows system tray; monitoring continues until the user chooses Exit.
-- Persian right-to-left interface with Vazirmatn fonts.
+- Persian and English interface with automatic right-to-left/left-to-right layout and a saved language preference. Persian text uses the bundled Vazirmatn font.
 
 ## Download and run
 

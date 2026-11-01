@@ -21,8 +21,12 @@ public partial class MainWindow : Window
     private IntPtr windowHandle;
     private bool shortcutRegistered;
     private bool allowExit;
+    private bool englishUi = LoadEnglishPreference();
     private Forms.NotifyIcon? trayIcon;
+    private Forms.ToolStripMenuItem? openTrayItem;
+    private Forms.ToolStripMenuItem? exitTrayItem;
     private readonly bool smoke = Environment.GetCommandLineArgs().Contains("--smoke");
+    private static string LanguagePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TitanoTrigger", "language.txt");
 
     [DllImport("user32.dll")]
     private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint modifiers, uint virtualKey);
@@ -34,6 +38,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         if (smoke) { ShowInTaskbar = false; WindowState = WindowState.Minimized; }
         controller = new AppController(Publish);
+        ApplyShellLanguage();
         SourceInitialized += (_, _) =>
         {
             windowHandle = new WindowInteropHelper(this).Handle;
@@ -55,9 +60,13 @@ public partial class MainWindow : Window
     {
         if (smoke || trayIcon is not null) return;
         var menu = new Forms.ContextMenuStrip();
-        menu.Items.Add("باز کردن Titano Trigger", null, (_, _) => RestoreFromTray());
+        openTrayItem = new Forms.ToolStripMenuItem();
+        exitTrayItem = new Forms.ToolStripMenuItem();
+        openTrayItem.Click += (_, _) => RestoreFromTray();
+        exitTrayItem.Click += (_, _) => ExitApplication();
+        menu.Items.Add(openTrayItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
-        menu.Items.Add("خروج کامل", null, (_, _) => ExitApplication());
+        menu.Items.Add(exitTrayItem);
         trayIcon = new Forms.NotifyIcon
         {
             Text = "Titano Trigger — آمادهٔ پایش",
@@ -65,6 +74,45 @@ public partial class MainWindow : Window
             ContextMenuStrip = menu
         };
         trayIcon.DoubleClick += (_, _) => RestoreFromTray();
+        ApplyShellLanguage();
+    }
+
+    private static bool LoadEnglishPreference()
+    {
+        try { return File.ReadAllText(LanguagePath).Trim().Equals("en", StringComparison.OrdinalIgnoreCase); }
+        catch { return false; }
+    }
+
+    private string SetLanguage(JsonElement value)
+    {
+        if (value.ValueKind == JsonValueKind.String)
+        {
+            englishUi = value.GetString()?.Equals("en", StringComparison.OrdinalIgnoreCase) == true;
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(LanguagePath)!);
+                File.WriteAllText(LanguagePath, englishUi ? "en" : "fa");
+            }
+            catch { }
+            ApplyShellLanguage();
+        }
+        return englishUi ? "en" : "fa";
+    }
+
+    private void ApplyShellLanguage()
+    {
+        if (MinimizeButton is null || MaximizeButton is null || CloseButton is null) return;
+        MinimizeButton.ToolTip = englishUi ? "Minimize" : "کوچک‌کردن";
+        MaximizeButton.ToolTip = WindowState == WindowState.Maximized
+            ? englishUi ? "Restore" : "بازگردانی"
+            : englishUi ? "Maximize" : "بزرگ‌نمایی";
+        CloseButton.ToolTip = englishUi ? "Minimize to system tray" : "کوچک‌کردن به سینی سیستم";
+        if (openTrayItem is not null) openTrayItem.Text = englishUi ? "Open Titano Trigger" : "باز کردن Titano Trigger";
+        if (exitTrayItem is not null) exitTrayItem.Text = englishUi ? "Exit" : "خروج کامل";
+        if (trayIcon is not null)
+            trayIcon.Text = englishUi
+                ? controller.State().Armed ? "Titano Trigger — live control active" : "Titano Trigger — ready in background"
+                : controller.State().Armed ? "Titano Trigger — پایش دونیت فعال است" : "Titano Trigger — در پس‌زمینه آماده است";
     }
 
     void OnClosing(object? sender, System.ComponentModel.CancelEventArgs args)
@@ -81,9 +129,11 @@ public partial class MainWindow : Window
         Hide();
         if (trayIcon is not null)
         {
-            trayIcon.Text = controller.State().Armed ? "Titano Trigger — پایش دونیت فعال است" : "Titano Trigger — در پس‌زمینه آماده است";
+            ApplyShellLanguage();
             trayIcon.Visible = true;
-            trayIcon.ShowBalloonTip(1800, "Titano Trigger", "برنامه در پس‌زمینه باز می‌ماند. برای بازکردن، روی آیکن کنار ساعت دوبار کلیک کنید.", Forms.ToolTipIcon.Info);
+            trayIcon.ShowBalloonTip(1800, "Titano Trigger", englishUi
+                ? "The app is still running. Double-click the tray icon to reopen it."
+                : "برنامه در پس‌زمینه باز می‌ماند. برای بازکردن، روی آیکن کنار ساعت دوبار کلیک کنید.", Forms.ToolTipIcon.Info);
         }
     }
 
@@ -113,7 +163,9 @@ public partial class MainWindow : Window
     {
         WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         MaximizeButton.Content = WindowState == WindowState.Maximized ? "▢" : "□";
-        MaximizeButton.ToolTip = WindowState == WindowState.Maximized ? "بازگردانی" : "بزرگ‌نمایی";
+        MaximizeButton.ToolTip = WindowState == WindowState.Maximized
+            ? englishUi ? "Restore" : "بازگردانی"
+            : englishUi ? "Maximize" : "بزرگ‌نمایی";
     }
 
     void CloseToTray_Click(object sender, RoutedEventArgs args) => MinimizeToTray();
@@ -165,7 +217,10 @@ public partial class MainWindow : Window
         catch (Exception error)
         {
             if (smoke) { Environment.ExitCode = 2; Close(); return; }
-            System.Windows.MessageBox.Show($"راه‌اندازی WebView2 ناموفق بود. نسخهٔ Microsoft Edge WebView2 Runtime را نصب کنید.\n\n{error.Message}", "Titano Trigger", MessageBoxButton.OK, MessageBoxImage.Error);
+            var message = englishUi
+                ? $"Could not start WebView2. Install the Microsoft Edge WebView2 Runtime.\n\n{error.Message}"
+                : $"راه‌اندازی WebView2 ناموفق بود. نسخهٔ Microsoft Edge WebView2 Runtime را نصب کنید.\n\n{error.Message}";
+            System.Windows.MessageBox.Show(message, "Titano Trigger", MessageBoxButton.OK, MessageBoxImage.Error);
             Close();
         }
     }
@@ -190,6 +245,7 @@ public partial class MainWindow : Window
             object? result = op switch
             {
                 "state" => controller.State(),
+                "language" => SetLanguage(value),
                 "connect" => await controller.Connect(value.GetString() ?? ""),
                 "disconnect" => controller.Disconnect(),
                 "rules" => controller.SetRules(JsonSerializer.Deserialize<List<Rule>>(value.GetRawText(), JsonOptions)),

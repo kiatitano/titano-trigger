@@ -70,9 +70,9 @@
                     <TextBlock Text="TITANO  /  TRIGGER" Foreground="#E9ECF7" FontFamily="Segoe UI" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
                     <TextBlock Text="   kiatitano &amp; titanoteam" Foreground="#8993B0" FontFamily="Segoe UI" FontSize="10" VerticalAlignment="Center" />
                 </StackPanel>
-                <Button Grid.Column="1" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="—" Style="{StaticResource CaptionButtonStyle}" ToolTip="کوچک‌کردن" Click="Minimize_Click" />
+                <Button x:Name="MinimizeButton" Grid.Column="1" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="—" Style="{StaticResource CaptionButtonStyle}" ToolTip="کوچک‌کردن" Click="Minimize_Click" />
                 <Button x:Name="MaximizeButton" Grid.Column="2" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="□" Style="{StaticResource CaptionButtonStyle}" ToolTip="بزرگ‌نمایی" Click="Maximize_Click" />
-                <Button Grid.Column="3" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="×" Style="{StaticResource CloseButtonStyle}" ToolTip="کوچک‌کردن به سینی سیستم" Click="CloseToTray_Click" />
+                <Button x:Name="CloseButton" Grid.Column="3" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="×" Style="{StaticResource CloseButtonStyle}" ToolTip="کوچک‌کردن به سینی سیستم" Click="CloseToTray_Click" />
             </Grid>
         </Border>
         <wv2:WebView2 x:Name="Browser" Grid.Row="1" />

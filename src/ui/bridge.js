@@ -24,6 +24,7 @@ if (!window.titano && window.chrome?.webview) {
   });
   window.titano = {
     state: () => call('state'),
+    language: (value) => call('language', value),
     connect: (token) => call('connect', token),
     disconnect: () => call('disconnect'),
     rules: (rules) => call('rules', rules),
