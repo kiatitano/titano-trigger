@@ -1,0 +1,31 @@
+# Local dependencies and build outputs
+node_modules/
+dist/
+publish/
+artifacts/
+**/bin/
+**/obj/
+
+# Local IDE, operating system, and runtime data
+.vs/
+.idea/
+.vscode/*.log
+user-data/
+*.WebView2/
+TitanoTrigger.exe.WebView2/
+Thumbs.db
+.DS_Store
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.user
+*.suo
+
+# Temporary and downloaded package archives
+*.log
+*.tmp
+*.cache
+*.tgz
+*.zip
