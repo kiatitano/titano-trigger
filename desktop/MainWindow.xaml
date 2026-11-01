@@ -1,0 +1,80 @@
+<Window x:Class="TitanoTrigger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="Titano Trigger — kiatitano &amp; titanoteam"
+        Height="850" Width="1280" MinHeight="650" MinWidth="900"
+        Background="#080B16" WindowStartupLocation="CenterScreen"
+        WindowStyle="None" ResizeMode="CanResize" AllowsTransparency="False">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="42" ResizeBorderThickness="6" CornerRadius="10" GlassFrameThickness="0" UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+    <Window.Resources>
+        <Style x:Key="CaptionButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#C8CEE0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Surface" Property="Background" Value="#252D45" /><Setter Property="Foreground" Value="White" /></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="Surface" Property="Background" Value="#343E5D" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+            <Setter Property="FontSize" Value="21" />
+            <Setter Property="Foreground" Value="#D4D8E6" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Surface" Property="Background" Value="#D34C68" /><Setter Property="Foreground" Value="White" /></Trigger>
+                            <Trigger Property="IsPressed" Value="True"><Setter TargetName="Surface" Property="Background" Value="#A9324C" /></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#080B16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="42" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#11172A" BorderBrush="#252D45" BorderThickness="0,0,0,1" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="46" />
+                    <ColumnDefinition Width="46" />
+                    <ColumnDefinition Width="52" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="17,0,0,0" IsHitTestVisible="False">
+                    <Border Width="22" Height="22" CornerRadius="7" Background="#8765E8" Margin="0,0,9,0">
+                        <TextBlock Text="T" Foreground="White" FontFamily="Segoe UI" FontWeight="Bold" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="TITANO  /  TRIGGER" Foreground="#E9ECF7" FontFamily="Segoe UI" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <TextBlock Text="   kiatitano &amp; titanoteam" Foreground="#8993B0" FontFamily="Segoe UI" FontSize="10" VerticalAlignment="Center" />
+                </StackPanel>
+                <Button Grid.Column="1" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="—" Style="{StaticResource CaptionButtonStyle}" ToolTip="کوچک‌کردن" Click="Minimize_Click" />
+                <Button x:Name="MaximizeButton" Grid.Column="2" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="□" Style="{StaticResource CaptionButtonStyle}" ToolTip="بزرگ‌نمایی" Click="Maximize_Click" />
+                <Button Grid.Column="3" shell:WindowChrome.IsHitTestVisibleInChrome="True" Content="×" Style="{StaticResource CloseButtonStyle}" ToolTip="کوچک‌کردن به سینی سیستم" Click="CloseToTray_Click" />
+            </Grid>
+        </Border>
+        <wv2:WebView2 x:Name="Browser" Grid.Row="1" />
+    </Grid>
+</Window>
